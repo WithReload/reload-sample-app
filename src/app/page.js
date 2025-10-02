@@ -12,6 +12,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
   const [copied, setCopied] = useState(false);
+  const [authData, setAuthData] = useState(null);
 
   // OAuth permissions state
   const [selectedPermissions, setSelectedPermissions] = useState({
@@ -160,18 +161,95 @@ export default function Home() {
 
       const data = await response.json();
 
-      if (data.access_token) {
-        setWalletToken(data.access_token);
+      if (data.status === "success" && data.data?.access_token) {
+        const tokenData = data.data;
+
+        // Store token and user data in localStorage for persistence
+        const authData = {
+          access_token: tokenData.access_token,
+          token_type: tokenData.token_type,
+          expires_in: tokenData.expires_in,
+          scope: tokenData.scope,
+          environment: tokenData.environment,
+          organization: tokenData.organization,
+          user: tokenData.user,
+          permissions: tokenData.permissions,
+          walletId: tokenData.walletId,
+          connectedAt: new Date().toISOString(),
+        };
+
+        // Store in localStorage for persistence across sessions
+        localStorage.setItem("reload_auth_data", JSON.stringify(authData));
+
+        // Update state
+        setWalletToken(tokenData.access_token);
         setIsConnected(true);
+        setAuthData(authData);
+
         // Clear PKCE parameters
         sessionStorage.removeItem("reload_code_verifier");
         sessionStorage.removeItem("reload_state");
+
+        console.log("Successfully connected to Reload:", {
+          user: tokenData.user.email,
+          organization: tokenData.organization.name,
+          permissions: tokenData.permissions,
+          environment: tokenData.environment,
+        });
       } else {
-        console.error("Token exchange failed:", data.error);
+        console.error("Token exchange failed:", data.error || data.message);
+        alert(
+          `Token exchange failed: ${
+            data.error || data.message || "Unknown error"
+          }`
+        );
       }
     } catch (error) {
       console.error("Error exchanging code for token:", error);
+      alert(`Error exchanging code for token: ${error.message}`);
     }
+  }, []);
+
+  // Check for existing auth data in localStorage on component mount
+  useEffect(() => {
+    const checkExistingAuth = () => {
+      try {
+        const storedAuthData = localStorage.getItem("reload_auth_data");
+        if (storedAuthData) {
+          const authData = JSON.parse(storedAuthData);
+
+          // Check if token is still valid (if it has an expiration)
+          if (authData.expires_in && authData.expires_in !== null) {
+            const connectedAt = new Date(authData.connectedAt);
+            const expiresAt = new Date(
+              connectedAt.getTime() + authData.expires_in * 1000
+            );
+
+            if (new Date() > expiresAt) {
+              // Token expired, clear localStorage
+              localStorage.removeItem("reload_auth_data");
+              return;
+            }
+          }
+
+          // Restore auth state
+          setWalletToken(authData.access_token);
+          setIsConnected(true);
+          setAuthData(authData);
+
+          console.log("Restored existing Reload connection:", {
+            user: authData.user.email,
+            organization: authData.organization.name,
+            environment: authData.environment,
+          });
+        }
+      } catch (error) {
+        console.error("Error restoring auth data:", error);
+        localStorage.removeItem("reload_auth_data");
+      }
+    };
+
+    checkExistingAuth();
   }, []);
 
   // Check for auth code when page loads
@@ -569,9 +647,14 @@ export default function Home() {
                   </div>
                   <button
                     onClick={() => {
+                      // Clear all auth data
                       setIsConnected(false);
                       setWalletToken("");
                       setResponse("");
+                      setAuthData(null);
+                      localStorage.removeItem("reload_auth_data");
+
+                      console.log("Disconnected from Reload");
                     }}
                     className='px-3 py-2 bg-white/20 text-white text-sm font-medium rounded-md hover:bg-white/30 transition-colors'
                   >
@@ -579,6 +662,55 @@ export default function Home() {
                   </button>
                 </div>
               </div>
+
+              {/* User Info Section */}
+              {authData && (
+                <div className='bg-blue-50 border-b border-blue-200 px-6 py-4'>
+                  <div className='flex items-center justify-between'>
+                    <div className='flex items-center space-x-4'>
+                      <div className='flex-shrink-0'>
+                        <div className='w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center'>
+                          <span className='text-white font-semibold text-sm'>
+                            {authData.user.firstName?.charAt(0)}
+                            {authData.user.lastName?.charAt(0)}
+                          </span>
+                        </div>
+                      </div>
+                      <div>
+                        <h3 className='text-sm font-semibold text-gray-900'>
+                          {authData.user.firstName} {authData.user.lastName}
+                        </h3>
+                        <p className='text-xs text-gray-600'>
+                          {authData.user.email}
+                        </p>
+                        <div className='flex items-center space-x-2 mt-1'>
+                          <span className='inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800'>
+                            {authData.organization.name}
+                          </span>
+                          <span className='inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800'>
+                            {authData.environment}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className='text-right'>
+                      <div className='text-xs text-gray-500 mb-1'>
+                        Permissions
+                      </div>
+                      <div className='flex flex-wrap gap-1'>
+                        {authData.permissions.map((permission) => (
+                          <span
+                            key={permission}
+                            className='inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800'
+                          >
+                            {permission.replace("_", " ")}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Tabs */}
               <div className='bg-gray-50 px-6 py-3 border-b border-gray-200'>
