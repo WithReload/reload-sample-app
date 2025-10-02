@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Reload Test App
+
+A modern, beautiful test application for integrating with Reload's OAuth flow and API endpoints. Features a stunning SaaS-like UI with glass morphism effects, smooth animations, and professional design.
+
+## ✨ Features
+
+- **🎨 Modern SaaS UI**: Beautiful glass morphism design with gradients and animations
+- **🔐 OAuth 2.0 Integration**: PKCE flow with permission selection
+- **🧪 API Testing Interface**: Interactive testing for all Reload endpoints
+- **📱 Responsive Design**: Works perfectly on all device sizes
+- **🌙 Dark Mode Support**: Beautiful dark theme with proper contrast
+- **⚡ Smooth Animations**: Polished transitions and micro-interactions
+
+## Environment Variables
+
+Create a `.env.local` file in the root directory with the following variables:
+
+```bash
+# Reload API Configuration
+NEXT_PUBLIC_RELOAD_API_BASE_URL=https://api.withreload.com/v1
+NEXT_PUBLIC_RELOAD_OAUTH_URL=http://localhost:3001
+NEXT_PUBLIC_RELOAD_CLIENT_ID=your-client-id-here
+NEXT_PUBLIC_RELOAD_CLIENT_SECRET=your-client-secret-here
+NEXT_PUBLIC_RELOAD_REDIRECT_URI=http://localhost:3000/callback
+
+# Server-side configuration (for API routes)
+RELOAD_API_BASE_URL=https://api.withreload.com/v1
+RELOAD_OAUTH_URL=https://oauth.withreload.com
+RELOAD_CLIENT_ID=your-client-id-here
+RELOAD_CLIENT_SECRET=your-client-secret-here
+RELOAD_REDIRECT_URI=http://localhost:3000/callback
+```
+
+## Required Environment Variables
+
+- `NEXT_PUBLIC_RELOAD_CLIENT_ID`: Your Reload application client ID
+- `NEXT_PUBLIC_RELOAD_REDIRECT_URI`: The redirect URI configured in your Reload application
 
 ## Getting Started
 
-First, run the development server:
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+2. Set up your environment variables in `.env.local`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Features
 
-## Learn More
+- OAuth 2.0 with PKCE flow
+- Permission selection (Identity, Usage Reporting, Payment)
+- Wallet selection for payment operations
+- API testing interface for various Reload endpoints
+- Real-time API response display
+- Copy-to-clipboard functionality
 
-To learn more about Next.js, take a look at the following resources:
+## Usage
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Select the permissions you want to authorize
+2. Click "Connect Reload Account" to start the OAuth flow
+3. Complete authentication in the OAuth flow
+4. Test various API endpoints using the provided interface
