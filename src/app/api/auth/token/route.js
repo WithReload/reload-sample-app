@@ -40,7 +40,7 @@ export async function POST(request) {
       code_verifier: codeVerifier, // Required by validation
     };
 
-    const response = await fetch(`${apiBaseUrl}/v1/tp/ai-agent/token`, {
+    const response = await fetch(`${apiBaseUrl}/v1/tp/ag/token`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
