@@ -8,7 +8,7 @@ import { useCallback, useEffect, useState } from "react";
 export default function Home() {
   const [isConnected, setIsConnected] = useState(false);
   const [walletToken, setWalletToken] = useState("");
-  const [activeTab, setActiveTab] = useState("wallet");
+  const [activeTab, setActiveTab] = useState("user");
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
   const [copied, setCopied] = useState(false);
@@ -266,15 +266,37 @@ export default function Home() {
     setResponse("");
 
     try {
-      const url = new URL("/api/reload", window.location.origin);
-      url.searchParams.set("endpoint", endpoint);
+      // Currently only /user endpoint is available as AI Agent endpoint
+      const isAIAgentEndpoint = endpoint === "/user";
+
+      let url, headers;
+
+      if (isAIAgentEndpoint) {
+        // AI Agent endpoints go through backend API with OAuth token only
+        url = new URL(`/api/ai-agent${endpoint}`, window.location.origin);
+        headers = {
+          "Content-Type": "application/json",
+          "X-Access-Token": walletToken, // Only send OAuth token, client credentials handled server-side
+        };
+      } else {
+        // For now, show error for non-implemented endpoints
+        setResponse(
+          JSON.stringify(
+            {
+              error: "Endpoint not implemented",
+              message: `The endpoint ${endpoint} is not yet available in the backend API.`,
+              availableEndpoints: ["/user"],
+            },
+            null,
+            2
+          )
+        );
+        return;
+      }
 
       const config = {
         method,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${walletToken}`,
-        },
+        headers,
         ...(body && { body: JSON.stringify(body) }),
       };
 
@@ -290,151 +312,16 @@ export default function Home() {
   };
 
   const apiEndpoints = {
-    wallet: {
-      title: "Wallet Details",
-      description: "Get wallet information",
-      endpoint: "/wallet",
+    user: {
+      title: "User Details",
+      description: "Get user and organization information",
+      endpoint: "/user",
       method: "GET",
       params: [],
-      action: () => makeApiCall("/wallet"),
+      action: () => makeApiCall("/user"),
     },
-    transactions: {
-      title: "Wallet Transactions",
-      description: "List wallet transactions",
-      endpoint: "/wallet/transactions",
-      method: "GET",
-      params: [
-        { key: "limit", label: "Limit", type: "number", value: formData.limit },
-        {
-          key: "offset",
-          label: "Offset",
-          type: "number",
-          value: formData.offset,
-        },
-      ],
-      action: () =>
-        makeApiCall(
-          `/wallet/transactions?limit=${formData.limit}&offset=${formData.offset}`
-        ),
-    },
-    transaction: {
-      title: "Get Transaction",
-      description: "Get specific transaction details",
-      endpoint: "/transactions/{id}",
-      method: "GET",
-      params: [
-        {
-          key: "transactionId",
-          label: "Transaction ID",
-          type: "text",
-          value: formData.transactionId,
-        },
-      ],
-      action: () => makeApiCall(`/transactions/${formData.transactionId}`),
-    },
-    previewCharge: {
-      title: "Preview Charge",
-      description: "Preview a wallet charge",
-      endpoint: "/wallet/charges/preview",
-      method: "POST",
-      params: [
-        {
-          key: "previewAmount",
-          label: "Amount (credits)",
-          type: "number",
-          value: formData.previewAmount,
-        },
-        {
-          key: "previewDescription",
-          label: "Description",
-          type: "text",
-          value: formData.previewDescription,
-        },
-      ],
-      action: () =>
-        makeApiCall("/wallet/charges/preview", "POST", {
-          amount: parseInt(formData.previewAmount),
-          description: formData.previewDescription,
-        }),
-    },
-    charge: {
-      title: "Charge Wallet",
-      description: "Charge credits from wallet",
-      endpoint: "/wallet/charges",
-      method: "POST",
-      params: [
-        {
-          key: "amount",
-          label: "Amount (credits)",
-          type: "number",
-          value: formData.amount,
-        },
-        {
-          key: "description",
-          label: "Description",
-          type: "text",
-          value: formData.description,
-        },
-        {
-          key: "metadata",
-          label: "Metadata (JSON)",
-          type: "textarea",
-          value: formData.metadata,
-        },
-      ],
-      action: () =>
-        makeApiCall("/wallet/charges", "POST", {
-          amount: parseInt(formData.amount),
-          description: formData.description,
-          metadata: JSON.parse(formData.metadata || "{}"),
-        }),
-    },
-    refund: {
-      title: "Refund Transaction",
-      description: "Refund a transaction",
-      endpoint: "/transactions/{id}/refunds",
-      method: "POST",
-      params: [
-        {
-          key: "refundTransactionId",
-          label: "Transaction ID",
-          type: "text",
-          value: formData.refundTransactionId,
-        },
-        {
-          key: "refundAmount",
-          label: "Refund Amount",
-          type: "number",
-          value: formData.refundAmount,
-        },
-        {
-          key: "refundReason",
-          label: "Reason",
-          type: "text",
-          value: formData.refundReason,
-        },
-      ],
-      action: () =>
-        makeApiCall(
-          `/transactions/${formData.refundTransactionId}/refunds`,
-          "POST",
-          {
-            amount: parseInt(formData.refundAmount),
-            reason: formData.refundReason,
-          }
-        ),
-    },
-    introspect: {
-      title: "Introspect Token",
-      description: "Validate wallet token",
-      endpoint: "/oauth/token/introspect",
-      method: "POST",
-      params: [],
-      action: () =>
-        makeApiCall("/oauth/token/introspect", "POST", {
-          token: walletToken,
-        }),
-    },
+    // Note: Other endpoints (wallet, transactions, charges, etc.) are not yet implemented
+    // in the backend. They will be added in future iterations.
   };
 
   const tabs = Object.keys(apiEndpoints);
@@ -475,8 +362,15 @@ export default function Home() {
             Reload API Testing
           </h1>
           <p className='text-sm text-gray-600 max-w-2xl mx-auto'>
-            Test and integrate with Reload&apos;s wallet and payment APIs
+            Test and integrate with Reload&apos;s AI Agent APIs
           </p>
+          <div className='mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md max-w-2xl mx-auto'>
+            <p className='text-xs text-blue-700'>
+              <strong>Current Status:</strong> Only the User Details endpoint is
+              available. Additional endpoints (wallet, transactions, charges)
+              will be implemented in future iterations.
+            </p>
+          </div>
         </div>
 
         {/* Wallet Connection Section */}
