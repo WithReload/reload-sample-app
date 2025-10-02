@@ -47,9 +47,25 @@ export function useAPICalls(walletToken) {
       const response = await fetch(url, config);
       const data = await response.json();
 
-      setResponse(JSON.stringify(data, null, 2));
+      // Format response with status code and better error display
+      const formattedResponse = {
+        status: response.status,
+        statusText: response.statusText,
+        success: response.ok,
+        data: data,
+        timestamp: new Date().toISOString(),
+      };
+
+      setResponse(JSON.stringify(formattedResponse, null, 2));
     } catch (error) {
-      setResponse(JSON.stringify({ error: error.message }, null, 2));
+      const errorResponse = {
+        status: 0,
+        statusText: "Network Error",
+        success: false,
+        error: error.message,
+        timestamp: new Date().toISOString(),
+      };
+      setResponse(JSON.stringify(errorResponse, null, 2));
     } finally {
       setLoading(false);
     }

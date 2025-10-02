@@ -11,6 +11,7 @@ export default function PreviewChargeForm({
     aiAgentId: "",
     amount: "",
     description: "",
+    idempotencyKey: "",
   });
 
   const handleInputChange = (field, value) => {
@@ -24,6 +25,8 @@ export default function PreviewChargeForm({
       currency: "USD",
       description: formData.description || "Preview charge",
     };
+    if (formData.idempotencyKey)
+      payload.idempotencyKey = formData.idempotencyKey;
     onMakeApiCall("/preview-charge", "POST", payload);
   };
 
@@ -91,6 +94,24 @@ export default function PreviewChargeForm({
             placeholder='Preview charge for API usage'
             onChange={(e) => handleInputChange("description", e.target.value)}
           />
+        </div>
+
+        <div>
+          <label className='block text-sm font-medium text-gray-700 mb-1'>
+            Idempotency Key (Optional)
+          </label>
+          <input
+            type='text'
+            className='w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-gray-900'
+            value={formData.idempotencyKey}
+            placeholder='preview-123-456'
+            onChange={(e) =>
+              handleInputChange("idempotencyKey", e.target.value)
+            }
+          />
+          <p className='text-xs text-gray-500 mt-1'>
+            Optional: Prevents duplicate charges if the same key is used
+          </p>
         </div>
 
         <button

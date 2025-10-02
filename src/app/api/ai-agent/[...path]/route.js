@@ -77,8 +77,11 @@ async function handleAIAgentRequest(request, params, method) {
     const data = await response.json();
 
     if (!response.ok) {
+      console.error("AI Agent API request failed:", data);
       return NextResponse.json(
-        { error: data.error || "AI Agent API request failed" },
+        {
+          error: data?.message || data?.error || "AI Agent API request failed",
+        },
         { status: response.status }
       );
     }
