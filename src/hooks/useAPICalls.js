@@ -9,8 +9,9 @@ export function useAPICalls(walletToken) {
     setResponse("");
 
     try {
-      // Currently only /user endpoint is available as AI Agent endpoint
-      const isAIAgentEndpoint = endpoint === "/user";
+      // AI Agent endpoints that are available
+      const availableEndpoints = ["/user", "/preview-charge", "/usage"];
+      const isAIAgentEndpoint = availableEndpoints.includes(endpoint);
 
       let url, headers;
 
@@ -22,13 +23,13 @@ export function useAPICalls(walletToken) {
           "X-Access-Token": walletToken, // Only send OAuth token, client credentials handled server-side
         };
       } else {
-        // For now, show error for non-implemented endpoints
+        // Show error for non-implemented endpoints
         setResponse(
           JSON.stringify(
             {
               error: "Endpoint not implemented",
               message: `The endpoint ${endpoint} is not yet available in the backend API.`,
-              availableEndpoints: ["/user"],
+              availableEndpoints: availableEndpoints,
             },
             null,
             2

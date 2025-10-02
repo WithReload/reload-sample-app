@@ -14,9 +14,9 @@ export default function HeroSection() {
       </p>
       <div className='mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md max-w-2xl mx-auto'>
         <p className='text-xs text-blue-700'>
-          <strong>Current Status:</strong> Only the User Details endpoint is
-          available. Additional endpoints (wallet, transactions, charges) will
-          be implemented in future iterations.
+          <strong>Available Endpoints:</strong> User Details, Preview Charge,
+          and Report Usage. The Charge User option in Report Usage requires
+          payment permission.
         </p>
       </div>
     </div>
