@@ -19,8 +19,8 @@ export default function UserDetailsForm({ onMakeApiCall, loading, response }) {
       <div className='bg-gray-50 rounded-md p-4 space-y-4'>
         <div className='text-center py-8'>
           <p className='text-sm text-gray-600 mb-4'>
-            This endpoint doesn't require any parameters. Click the button below
-            to get user details.
+            This endpoint doesn&apos;t require any parameters. Click the button
+            below to get user details.
           </p>
 
           <button

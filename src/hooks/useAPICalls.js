@@ -10,8 +10,15 @@ export function useAPICalls(walletToken) {
 
     try {
       // AI Agent endpoints that are available
-      const availableEndpoints = ["/user", "/preview-charge", "/usage"];
-      const isAIAgentEndpoint = availableEndpoints.includes(endpoint);
+      const availableEndpoints = [
+        "/user",
+        "/preview-charge",
+        "/usage",
+        "/usage-reports",
+      ];
+      const isAIAgentEndpoint =
+        availableEndpoints.includes(endpoint) ||
+        endpoint.startsWith("/usage-reports");
 
       let url, headers;
 

@@ -9,6 +9,8 @@ import {
 import {
   PreviewChargeForm,
   ReportUsageForm,
+  UsageReportByIdForm,
+  UsageReportsForm,
   UserDetailsForm,
 } from "@/components/forms";
 import { useAPICalls, useOAuth } from "@/hooks";
@@ -45,6 +47,8 @@ export default function Home() {
     { key: "user", title: "User Details" },
     { key: "previewCharge", title: "Preview Charge" },
     { key: "reportUsage", title: "Report Usage" },
+    { key: "usageReports", title: "Usage Reports" },
+    { key: "usageReportById", title: "Get Report by ID" },
   ];
 
   return (
@@ -155,6 +159,20 @@ export default function Home() {
                             authData={authData}
                           />
                         )}
+                        {activeTab === "usageReports" && (
+                          <UsageReportsForm
+                            onApiCall={makeApiCall}
+                            loading={loading}
+                            authData={authData}
+                          />
+                        )}
+                        {activeTab === "usageReportById" && (
+                          <UsageReportByIdForm
+                            onApiCall={makeApiCall}
+                            loading={loading}
+                            authData={authData}
+                          />
+                        )}
                       </div>
 
                       {/* Response */}
@@ -176,7 +194,7 @@ export default function Home() {
                                 onClick={() => {
                                   navigator.clipboard.writeText(response);
                                 }}
-                                className='text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded transition-colors'
+                                className='text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded transition-colors text-gray-800 hover:text-gray-900'
                               >
                                 Copy
                               </button>
