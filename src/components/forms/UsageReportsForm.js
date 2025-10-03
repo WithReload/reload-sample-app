@@ -293,19 +293,13 @@ const UsageReportsForm = ({ authData, onApiCall, loading }) => {
             <label className='block text-sm font-medium text-gray-700 mb-1'>
               Usage Type
             </label>
-            <select
+            <input
+              type='text'
               value={filters.usageType}
               onChange={(e) => handleInputChange("usageType", e.target.value)}
+              placeholder='e.g., API Call, Token Usage, New Session, Feature Usage'
               className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm text-gray-900'
-            >
-              <option value=''>All</option>
-              <option value='api_call'>API Call</option>
-              <option value='llm_tokens'>LLM Tokens</option>
-              <option value='storage'>Storage</option>
-              <option value='bandwidth'>Bandwidth</option>
-              <option value='compute'>Compute</option>
-              <option value='custom'>Custom</option>
-            </select>
+            />
           </div>
 
           {/* Sorting */}

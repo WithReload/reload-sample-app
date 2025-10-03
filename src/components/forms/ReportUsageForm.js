@@ -9,7 +9,7 @@ export default function ReportUsageForm({
 }) {
   const [formData, setFormData] = useState({
     aiAgentId: "",
-    usageType: "api_call",
+    usageType: "API Call",
     description: "",
     shortDescription: "",
     amount: "",
@@ -143,18 +143,15 @@ export default function ReportUsageForm({
 
         <div>
           <label className='block text-sm font-medium text-gray-700 mb-1'>
-            Usage Type <span className='text-red-500 ml-1'>*</span>
+            Usage Type
           </label>
-          <select
+          <input
+            type='text'
             className='w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-gray-900'
             value={formData.usageType}
+            placeholder='e.g., API Call, Token Usage, New Session, Feature Usage'
             onChange={(e) => handleInputChange("usageType", e.target.value)}
-          >
-            <option value='api_call'>API Call</option>
-            <option value='token_usage'>Token Usage</option>
-            <option value='session'>Session</option>
-            <option value='feature_usage'>Feature Usage</option>
-          </select>
+          />
         </div>
 
         <div>
