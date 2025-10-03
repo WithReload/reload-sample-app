@@ -68,7 +68,7 @@ async function handleAIAgentRequest(request, params, method) {
     }
 
     // Make the request to the backend API
-    const response = await fetch(`${apiBaseUrl}/v1/tp/ag${endpoint}`, {
+    const response = await fetch(`${apiBaseUrl}/v1/tp${endpoint}`, {
       method,
       headers,
       ...(body && { body: JSON.stringify(body) }),
