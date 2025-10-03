@@ -68,6 +68,18 @@ export default function Home() {
           />
         ) : (
           <div className='max-w-6xl mx-auto'>
+            {/* Webhook Test Link */}
+            <div className='mb-6 text-center'>
+              <a
+                href='/webhook-test'
+                className='inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm font-medium'
+              >
+                🧪 Test Webhook Endpoint
+              </a>
+              <p className='text-xs text-gray-500 mt-1'>
+                Test webhook events and view logs
+              </p>
+            </div>
             <div className='bg-white rounded-lg shadow-sm border border-gray-200'>
               {/* Connected Header */}
               <div className='bg-gray-800 px-6 py-4 rounded-t-lg'>
