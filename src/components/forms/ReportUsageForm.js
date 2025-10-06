@@ -20,6 +20,8 @@ export default function ReportUsageForm({
     outputTokens: "",
     chargeUser: false,
     idempotencyKey: "",
+    // AI Agent internal token/credit system
+    internalTokensOrCredits: "",
   });
 
   const handleInputChange = (field, value) => {
@@ -47,6 +49,12 @@ export default function ReportUsageForm({
     if (formData.chargeUser) payload.chargeUser = formData.chargeUser;
     if (formData.idempotencyKey)
       payload.idempotencyKey = formData.idempotencyKey;
+
+    // Add AI Agent internal token/credit field if provided
+    if (formData.internalTokensOrCredits)
+      payload.internalTokensOrCredits = parseFloat(
+        formData.internalTokensOrCredits
+      );
 
     onMakeApiCall("/usage", "POST", payload);
   };
@@ -273,6 +281,34 @@ export default function ReportUsageForm({
               handleInputChange("idempotencyKey", e.target.value)
             }
           />
+        </div>
+
+        {/* AI Agent Internal Token/Credit System */}
+        <div className='border-t border-gray-200 pt-4'>
+          <h4 className='text-sm font-medium text-gray-900 mb-3'>
+            AI Agent Internal System (Optional)
+          </h4>
+          <p className='text-xs text-gray-500 mb-4'>
+            Track your internal token/credit consumption alongside USD costs
+          </p>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-1'>
+              Internal Tokens or Credits Used
+            </label>
+            <input
+              type='number'
+              className='w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-gray-900'
+              value={formData.internalTokensOrCredits}
+              placeholder='1000'
+              onChange={(e) =>
+                handleInputChange("internalTokensOrCredits", e.target.value)
+              }
+            />
+            <p className='text-xs text-gray-500 mt-1'>
+              Number of tokens or credits consumed from your internal system
+            </p>
+          </div>
         </div>
 
         <button
