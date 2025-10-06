@@ -4,17 +4,33 @@ export function useAPICalls(walletToken) {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
 
-  const makeApiCall = async (endpoint, method = "GET", body = null) => {
+  const makeApiCall = async (requestData) => {
     setLoading(true);
     setResponse("");
 
     try {
+      // Handle both old format (endpoint, method, body) and new format (requestData object)
+      let endpoint, method, body;
+      if (typeof requestData === "string") {
+        // Old format - backward compatibility
+        endpoint = requestData;
+        method = "GET";
+        body = null;
+      } else {
+        // New format
+        endpoint = requestData.endpoint;
+        method = requestData.method || "GET";
+        body = requestData.body || null;
+      }
+
       // AI Agent endpoints that are available
       const availableEndpoints = [
         "/user",
         "/preview-charge",
         "/usage",
         "/usage-reports",
+        "/revoke-token",
+        "/introspect-token",
       ];
       const isAIAgentEndpoint =
         availableEndpoints.includes(endpoint) ||

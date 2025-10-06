@@ -7,8 +7,10 @@ import {
   WalletConnection,
 } from "@/components";
 import {
+  IntrospectTokenForm,
   PreviewChargeForm,
   ReportUsageForm,
+  RevokeTokenForm,
   UsageReportByIdForm,
   UsageReportsForm,
   UserDetailsForm,
@@ -49,6 +51,8 @@ export default function Home() {
     { key: "reportUsage", title: "Report Usage" },
     { key: "usageReports", title: "Usage Reports" },
     { key: "usageReportById", title: "Get Report by ID" },
+    { key: "revokeToken", title: "Revoke Token" },
+    { key: "introspectToken", title: "Introspect Token" },
   ];
 
   return (
@@ -170,6 +174,22 @@ export default function Home() {
                           <UsageReportByIdForm
                             onApiCall={makeApiCall}
                             loading={loading}
+                            authData={authData}
+                          />
+                        )}
+                        {activeTab === "revokeToken" && (
+                          <RevokeTokenForm
+                            onMakeApiCall={makeApiCall}
+                            loading={loading}
+                            response={response}
+                            authData={authData}
+                          />
+                        )}
+                        {activeTab === "introspectToken" && (
+                          <IntrospectTokenForm
+                            onMakeApiCall={makeApiCall}
+                            loading={loading}
+                            response={response}
                             authData={authData}
                           />
                         )}

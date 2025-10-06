@@ -21,15 +21,6 @@ async function handleAIAgentRequest(request, params, method) {
     const { path } = params;
     const endpoint = `/${path.join("/")}`;
 
-    // Get OAuth token from headers
-    const oauthToken = request.headers.get("X-Access-Token");
-    if (!oauthToken) {
-      return NextResponse.json(
-        { error: "Missing OAuth token in X-Access-Token header" },
-        { status: 401 }
-      );
-    }
-
     // Get client credentials from environment variables
     const clientId = process.env.RELOAD_CLIENT_ID;
     const clientSecret = process.env.RELOAD_CLIENT_SECRET;
@@ -50,11 +41,24 @@ async function handleAIAgentRequest(request, params, method) {
       "base64"
     );
 
+    // Token management endpoints don't require OAuth token
+    const tokenManagementEndpoints = ["/revoke-token", "/introspect-token"];
+    const requiresOAuthToken = !tokenManagementEndpoints.includes(endpoint);
+
+    // Get OAuth token from headers (only for endpoints that require it)
+    const oauthToken = request.headers.get("X-Access-Token");
+    if (requiresOAuthToken && !oauthToken) {
+      return NextResponse.json(
+        { error: "Missing OAuth token in X-Access-Token header" },
+        { status: 401 }
+      );
+    }
+
     // Prepare headers for the backend API call
     const headers = {
       "Content-Type": "application/json",
       Authorization: `Basic ${credentials}`,
-      "X-Access-Token": oauthToken,
+      ...(oauthToken && { "X-Access-Token": oauthToken }),
     };
 
     // Get request body if it's a POST/PUT request
