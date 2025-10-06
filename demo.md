@@ -35,13 +35,6 @@
 
 ## Features
 
-### 🎨 Modern SaaS UI
-- Beautiful gradient backgrounds
-- Glass morphism effects
-- Smooth animations and hover effects
-- Responsive design for all screen sizes
-- Dark mode support
-
 ### 🔐 OAuth 2.0 Integration
 - PKCE (Proof Key for Code Exchange) flow
 - Permission selection (Identity, Usage Reporting, Payment)

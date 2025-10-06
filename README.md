@@ -4,12 +4,23 @@ A modern, beautiful test application for integrating with Reload's OAuth flow an
 
 ## ✨ Features
 
-- **🎨 Modern SaaS UI**: Beautiful glass morphism design with gradients and animations
-- **🔐 OAuth 2.0 Integration**: PKCE flow with permission selection
-- **🧪 API Testing Interface**: Interactive testing for all Reload endpoints
-- **📱 Responsive Design**: Works perfectly on all device sizes
-- **🌙 Dark Mode Support**: Beautiful dark theme with proper contrast
-- **⚡ Smooth Animations**: Polished transitions and micro-interactions
+### 🔐 OAuth 2.0 Integration
+- PKCE (Proof Key for Code Exchange) flow
+- Permission selection (Identity, Usage Reporting, Payment)
+- Secure token exchange
+- Automatic wallet selection for payment operations
+
+### 🧪 API Testing Interface
+- Interactive API testing for all Reload endpoints
+- Real-time response display
+- Copy-to-clipboard functionality
+- Form validation and error handling
+
+### 🛠️ Developer Experience
+- Environment variable configuration
+- Comprehensive error messages
+- Loading states and feedback
+- Clean, maintainable code structure
 
 ## Environment Variables
 
@@ -56,10 +67,8 @@ RELOAD_REDIRECT_URI=http://localhost:3000/callback
 
 - OAuth 2.0 with PKCE flow
 - Permission selection (Identity, Usage Reporting, Payment)
-- Wallet selection for payment operations
 - API testing interface for various Reload endpoints
 - Real-time API response display
-- Copy-to-clipboard functionality
 
 ## Usage
 
