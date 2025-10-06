@@ -2,7 +2,10 @@ import { RefreshCw, Send } from "lucide-react";
 
 export default function UserDetailsForm({ onMakeApiCall, loading, response }) {
   const handleSubmit = () => {
-    onMakeApiCall("/user", "GET");
+    onMakeApiCall({
+      endpoint: "/user",
+      method: "GET",
+    });
   };
 
   return (

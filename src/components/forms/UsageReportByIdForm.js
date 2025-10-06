@@ -13,7 +13,10 @@ const UsageReportByIdForm = ({ authData, onApiCall, loading }) => {
       return;
     }
 
-    onApiCall(`/usage-reports/${usageReportId.trim()}`, "GET");
+    onApiCall({
+      endpoint: `/usage-reports/${usageReportId.trim()}`,
+      method: "GET",
+    });
   };
 
   const handleReset = () => {

@@ -167,6 +167,7 @@ export default function Home() {
                           <UsageReportsForm
                             onApiCall={makeApiCall}
                             loading={loading}
+                            response={response}
                             authData={authData}
                           />
                         )}
@@ -174,6 +175,7 @@ export default function Home() {
                           <UsageReportByIdForm
                             onApiCall={makeApiCall}
                             loading={loading}
+                            response={response}
                             authData={authData}
                           />
                         )}

@@ -12,7 +12,6 @@ export default function ReportUsageForm({
     usageType: "API Call",
     description: "",
     shortDescription: "",
-    amount: "",
     totalCost: "",
     llmModel: "",
     llmProvider: "",
@@ -32,13 +31,12 @@ export default function ReportUsageForm({
     const payload = {
       aiAgentId: formData.aiAgentId,
       usageType: formData.usageType,
-      description: formData.description || "",
+      description: formData.description,
       shortDescription: formData.shortDescription || "",
       currency: "USD",
     };
 
     // Add optional fields if provided
-    if (formData.amount) payload.amount = parseFloat(formData.amount);
     if (formData.totalCost) payload.totalCost = parseFloat(formData.totalCost);
     if (formData.llmModel) payload.llmModel = formData.llmModel;
     if (formData.llmProvider) payload.llmProvider = formData.llmProvider;
@@ -56,7 +54,11 @@ export default function ReportUsageForm({
         formData.internalTokensOrCredits
       );
 
-    onMakeApiCall("/usage", "POST", payload);
+    onMakeApiCall({
+      endpoint: "/usage",
+      method: "POST",
+      body: payload,
+    });
   };
 
   const hasPaymentPermission = authData?.permissions?.includes("payment");
@@ -164,7 +166,7 @@ export default function ReportUsageForm({
 
         <div>
           <label className='block text-sm font-medium text-gray-700 mb-1'>
-            Description
+            Description <span className='text-red-500 ml-1'>*</span>
           </label>
           <input
             type='text'
@@ -172,6 +174,7 @@ export default function ReportUsageForm({
             value={formData.description}
             placeholder='API call to process user data'
             onChange={(e) => handleInputChange("description", e.target.value)}
+            required
           />
         </div>
 
@@ -187,19 +190,6 @@ export default function ReportUsageForm({
             onChange={(e) =>
               handleInputChange("shortDescription", e.target.value)
             }
-          />
-        </div>
-
-        <div>
-          <label className='block text-sm font-medium text-gray-700 mb-1'>
-            Amount (optional)
-          </label>
-          <input
-            type='number'
-            className='w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-gray-900'
-            value={formData.amount}
-            placeholder='5.00'
-            onChange={(e) => handleInputChange("amount", e.target.value)}
           />
         </div>
 

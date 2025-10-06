@@ -27,7 +27,11 @@ export default function PreviewChargeForm({
     };
     if (formData.idempotencyKey)
       payload.idempotencyKey = formData.idempotencyKey;
-    onMakeApiCall("/preview-charge", "POST", payload);
+    onMakeApiCall({
+      endpoint: "/preview-charge",
+      method: "POST",
+      body: payload,
+    });
   };
 
   return (

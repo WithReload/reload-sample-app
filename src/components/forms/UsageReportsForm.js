@@ -47,7 +47,10 @@ const UsageReportsForm = ({ authData, onApiCall, loading }) => {
       ? `/usage-reports?${queryString}`
       : "/usage-reports";
 
-    onApiCall(endpoint, "GET");
+    onApiCall({
+      endpoint: endpoint,
+      method: "GET",
+    });
   };
 
   const handleReset = () => {
