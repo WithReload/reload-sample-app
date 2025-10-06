@@ -22,7 +22,6 @@ export default function PreviewChargeForm({
     const payload = {
       aiAgentId: formData.aiAgentId,
       amount: parseFloat(formData.amount) || 0,
-      currency: "USD",
       description: formData.description || "Preview charge",
     };
     if (formData.idempotencyKey)
@@ -72,18 +71,9 @@ export default function PreviewChargeForm({
             value={formData.amount}
             placeholder='10.00'
             onChange={(e) => handleInputChange("amount", e.target.value)}
-          />
-        </div>
-
-        <div>
-          <label className='block text-sm font-medium text-gray-700 mb-1'>
-            Currency
-          </label>
-          <input
-            type='text'
-            className='w-full px-3 py-2 bg-gray-100 border border-gray-200 rounded-md text-sm text-gray-500 cursor-not-allowed'
-            value='USD'
-            disabled
+            required
+            min='0'
+            step='0.01'
           />
         </div>
 

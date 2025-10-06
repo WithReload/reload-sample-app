@@ -33,11 +33,10 @@ export default function ReportUsageForm({
       usageType: formData.usageType,
       description: formData.description,
       shortDescription: formData.shortDescription || "",
-      currency: "USD",
+      totalCost: parseFloat(formData.totalCost),
     };
 
     // Add optional fields if provided
-    if (formData.totalCost) payload.totalCost = parseFloat(formData.totalCost);
     if (formData.llmModel) payload.llmModel = formData.llmModel;
     if (formData.llmProvider) payload.llmProvider = formData.llmProvider;
     if (formData.inputTokens)
@@ -195,7 +194,7 @@ export default function ReportUsageForm({
 
         <div>
           <label className='block text-sm font-medium text-gray-700 mb-1'>
-            Total Cost (USD)
+            Total Cost (USD) <span className='text-red-500 ml-1'>*</span>
           </label>
           <input
             type='number'
@@ -203,7 +202,13 @@ export default function ReportUsageForm({
             value={formData.totalCost}
             placeholder='5.50'
             onChange={(e) => handleInputChange("totalCost", e.target.value)}
+            required
+            min='0'
+            step='0.01'
           />
+          <p className='text-xs text-gray-500 mt-1'>
+            Required field. Use 0 for free usage.
+          </p>
         </div>
 
         <div>
