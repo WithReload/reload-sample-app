@@ -87,9 +87,6 @@ export default function Home() {
                       <h2 className='text-lg font-semibold text-white'>
                         {UI_TEXT.WALLET_CONNECTED}
                       </h2>
-                      <p className='text-gray-300 text-sm'>
-                        {UI_TEXT.READY_TO_TEST}
-                      </p>
                     </div>
                   </div>
                   <button

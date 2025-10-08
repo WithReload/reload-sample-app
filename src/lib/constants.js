@@ -195,7 +195,6 @@ export const LLM_PROVIDERS = [
   "AI21",
   "Replicate",
 ];
-
 // Form Field Types
 export const FIELD_TYPES = {
   TEXT: "text",

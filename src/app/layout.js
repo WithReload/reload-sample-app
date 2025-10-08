@@ -1,3 +1,4 @@
+import { UI_TEXT } from "@/lib/constants";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -8,12 +9,25 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "Reload API Testing",
-  description:
-    "Test and integrate with Reload's powerful wallet and payment APIs",
-  keywords: ["reload", "api", "testing", "oauth", "wallet", "payments"],
+  title: UI_TEXT.APP_TITLE,
+  description: UI_TEXT.APP_DESCRIPTION,
+  keywords: [
+    "reload",
+    "api",
+    "testing",
+    "oauth",
+    "wallet",
+    "payments",
+    "ai",
+    "monetization",
+  ],
   authors: [{ name: "Reload" }],
   viewport: "width=device-width, initial-scale=1",
+  icons: {
+    icon: "/images/logo.png",
+    shortcut: "/images/logo.png",
+    apple: "/images/logo.png",
+  },
 };
 
 export default function RootLayout({ children }) {
