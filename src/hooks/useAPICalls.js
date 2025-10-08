@@ -1,3 +1,5 @@
+import { API_ENDPOINTS } from "@/lib/constants";
+import { api } from "@/lib/utils";
 import { useState } from "react";
 
 export function useAPICalls(walletToken) {
@@ -24,14 +26,7 @@ export function useAPICalls(walletToken) {
       }
 
       // AI Agent endpoints that are available
-      const availableEndpoints = [
-        "/user",
-        "/preview-charge",
-        "/usage",
-        "/usage-reports",
-        "/revoke-token",
-        "/introspect-token",
-      ];
+      const availableEndpoints = Object.values(API_ENDPOINTS);
       const isAIAgentEndpoint =
         availableEndpoints.includes(endpoint) ||
         endpoint.startsWith("/usage-reports");
@@ -70,24 +65,11 @@ export function useAPICalls(walletToken) {
       const response = await fetch(url, config);
       const data = await response.json();
 
-      // Format response with status code and better error display
-      const formattedResponse = {
-        status: response.status,
-        statusText: response.statusText,
-        success: response.ok,
-        data: data,
-        timestamp: new Date().toISOString(),
-      };
-
+      // Format response using utility function
+      const formattedResponse = api.formatResponse(response, data);
       setResponse(JSON.stringify(formattedResponse, null, 2));
     } catch (error) {
-      const errorResponse = {
-        status: 0,
-        statusText: "Network Error",
-        success: false,
-        error: error.message,
-        timestamp: new Date().toISOString(),
-      };
+      const errorResponse = api.formatError(error);
       setResponse(JSON.stringify(errorResponse, null, 2));
     } finally {
       setLoading(false);

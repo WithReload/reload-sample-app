@@ -1,3 +1,4 @@
+import { DEFAULTS } from "@/lib/constants";
 import { RefreshCw, Send } from "lucide-react";
 import { useState } from "react";
 
@@ -10,7 +11,7 @@ export default function PreviewChargeForm({
   const [formData, setFormData] = useState({
     aiAgentId: "",
     amount: "",
-    description: "",
+    description: DEFAULTS.DESCRIPTION,
     idempotencyKey: "",
   });
 

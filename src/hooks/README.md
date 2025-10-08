@@ -1,58 +1,135 @@
 # Custom Hooks
 
-This directory contains custom React hooks for the Reload API Testing application.
+This directory contains custom React hooks used throughout the Reload API Test App.
 
-## Hook Structure
+## Available Hooks
 
 ### useOAuth
 - **File**: `useOAuth.js`
-- **Purpose**: Manages OAuth flow, token exchange, and authentication state
+- **Purpose**: Manages OAuth authentication flow and token state
 - **Returns**:
-  - `isConnected` (boolean): Whether user is authenticated
-  - `walletToken` (string): OAuth access token
-  - `authData` (object): Complete authentication data
-  - `connectWallet` (function): Initiate OAuth flow
-  - `disconnect` (function): Clear authentication
-  - `exchangeCodeForToken` (function): Exchange auth code for token
+  - `isConnected`: Boolean indicating if user is authenticated
+  - `walletToken`: OAuth access token
+  - `authData`: Complete authentication data object
+  - `connectWallet`: Function to initiate OAuth flow
+  - `disconnect`: Function to disconnect and clear auth data
+  - `exchangeCodeForToken`: Function to exchange authorization code for token
+- **Features**:
+  - PKCE implementation for secure OAuth flow
+  - Token persistence in localStorage
+  - Automatic token validation and refresh
+  - Session restoration on page reload
 
 ### useAPICalls
 - **File**: `useAPICalls.js`
-- **Purpose**: Manages API calls and response state
-- **Parameters**: `walletToken` (string)
+- **Purpose**: Manages API calls and response handling
+- **Parameters**:
+  - `walletToken`: OAuth access token for authentication
 - **Returns**:
-  - `loading` (boolean): API call in progress
-  - `response` (string): API response data
-  - `makeApiCall` (function): Execute API call
+  - `loading`: Boolean indicating if API call is in progress
+  - `response`: String containing formatted API response
+  - `makeApiCall`: Function to make API calls
+- **Features**:
+  - Automatic request formatting
+  - Response formatting with status codes
+  - Error handling and display
+  - Support for both GET and POST requests
+  - Client credentials handled server-side
 
-## Usage
+## Usage Examples
 
+### OAuth Authentication
 ```jsx
-import { useOAuth, useAPICalls } from '@/hooks';
+import { useOAuth } from '@/hooks';
 
 function MyComponent() {
   const { isConnected, walletToken, authData, connectWallet, disconnect } = useOAuth();
-  const { loading, response, makeApiCall } = useAPICalls(walletToken);
-
-  // Use the hooks in your component logic
+  
   const handleConnect = () => {
-    connectWallet(selectedPermissions);
-  };
-
-  const handleApiCall = () => {
-    makeApiCall('/user');
+    connectWallet({
+      identity: true,
+      usage_reporting: true,
+      payment: true
+    });
   };
 
   return (
-    // Your JSX
+    <div>
+      {isConnected ? (
+        <div>
+          <p>Connected as: {authData.user.email}</p>
+          <button onClick={disconnect}>Disconnect</button>
+        </div>
+      ) : (
+        <button onClick={handleConnect}>Connect Wallet</button>
+      )}
+    </div>
   );
 }
 ```
 
-## Design Principles
+### API Calls
+```jsx
+import { useAPICalls } from '@/hooks';
 
-1. **Separation of Concerns**: Each hook handles a specific domain
-2. **State Management**: Centralized state management for related functionality
-3. **Reusability**: Hooks can be used across multiple components
-4. **Error Handling**: Built-in error handling and user feedback
-5. **Persistence**: Automatic state persistence using localStorage
-6. **Type Safety**: Clear parameter and return types
+function MyComponent() {
+  const { walletToken } = useOAuth();
+  const { loading, response, makeApiCall } = useAPICalls(walletToken);
+  
+  const handleGetUserDetails = () => {
+    makeApiCall({
+      endpoint: '/user',
+      method: 'GET'
+    });
+  };
+
+  const handleReportUsage = () => {
+    makeApiCall({
+      endpoint: '/usage',
+      method: 'POST',
+      body: {
+        aiAgentId: 'agent_123',
+        description: 'Test usage',
+        totalCost: 10.50,
+        chargeUser: true
+      }
+    });
+  };
+
+  return (
+    <div>
+      <button onClick={handleGetUserDetails} disabled={loading}>
+        Get User Details
+      </button>
+      <button onClick={handleReportUsage} disabled={loading}>
+        Report Usage
+      </button>
+      {response && <pre>{response}</pre>}
+    </div>
+  );
+}
+```
+
+## Integration with Constants
+
+Hooks use constants from `@/lib/constants` for:
+- API endpoint configuration
+- OAuth permission handling
+- Storage keys for localStorage
+- Default values and validation rules
+
+## Error Handling
+
+Both hooks include comprehensive error handling:
+- Network errors are caught and formatted
+- API errors are displayed with user-friendly messages
+- Validation errors are handled gracefully
+- Console logging for debugging
+
+## State Management
+
+Hooks manage their own state internally and provide clean interfaces for components:
+- No external state management required
+- Automatic cleanup on component unmount
+- Persistent state where appropriate (OAuth tokens)
+- Optimized re-renders with proper dependency arrays

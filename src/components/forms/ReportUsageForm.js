@@ -1,3 +1,4 @@
+import { DEFAULTS, OAUTH_PERMISSIONS } from "@/lib/constants";
 import { RefreshCw, Send } from "lucide-react";
 import { useState } from "react";
 
@@ -9,17 +10,16 @@ export default function ReportUsageForm({
 }) {
   const [formData, setFormData] = useState({
     aiAgentId: "",
-    usageType: "API Call",
-    description: "",
-    shortDescription: "",
+    usageType: DEFAULTS.USAGE_TYPE,
+    description: DEFAULTS.DESCRIPTION,
+    shortDescription: DEFAULTS.SHORT_DESCRIPTION,
     totalCost: "",
-    llmModel: "",
-    llmProvider: "",
+    llmModel: DEFAULTS.LLM_MODEL,
+    llmProvider: DEFAULTS.LLM_PROVIDER,
     inputTokens: "",
     outputTokens: "",
     chargeUser: false,
     idempotencyKey: "",
-    // AI Agent internal token/credit system
     internalTokensOrCredits: "",
   });
 
@@ -60,7 +60,9 @@ export default function ReportUsageForm({
     });
   };
 
-  const hasPaymentPermission = authData?.permissions?.includes("payment");
+  const hasPaymentPermission = authData?.permissions?.includes(
+    OAUTH_PERMISSIONS.PAYMENT
+  );
 
   return (
     <div className='space-y-4'>

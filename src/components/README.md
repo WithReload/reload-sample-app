@@ -1,81 +1,99 @@
 # Components
 
-This directory contains reusable React components for the Reload API Testing application.
+This directory contains all the React components used in the Reload API Test App.
 
 ## Component Structure
 
-### Navigation
-- **File**: `Navigation.js`
-- **Purpose**: Top navigation bar with app branding and connection status
-- **Props**: `isConnected` (boolean)
+### Core Components
 
 ### HeroSection
 - **File**: `HeroSection.js`
-- **Purpose**: Main hero section with app title and status information
+- **Purpose**: Main hero section with app title and description
 - **Props**: None
+- **Features**:
+  - App branding
+  - Clear value proposition
+  - Call-to-action buttons
+
+### Navigation
+- **File**: `Navigation.js`
+- **Purpose**: Top navigation bar
+- **Props**:
+  - `isConnected`: Boolean indicating if user is connected
+- **Features**:
+  - App logo and title
+  - Connection status indicator
+  - Responsive design
 
 ### PermissionSelector
 - **File**: `PermissionSelector.js`
-- **Purpose**: Interactive permission selection interface
-- **Props**: 
-  - `selectedPermissions` (object)
-  - `onPermissionChange` (function)
-
-### WalletConnection
-- **File**: `WalletConnection.js`
-- **Purpose**: Complete wallet connection flow with permissions and configuration
+- **Purpose**: OAuth permission selection interface
 - **Props**:
-  - `selectedPermissions` (object)
-  - `onPermissionChange` (function)
-  - `onConnect` (function)
-  - `clientConfig` (object)
+  - `selectedPermissions`: Object containing selected permissions
+  - `onPermissionChange`: Function to handle permission changes
+- **Features**:
+  - Checkbox interface for permissions
+  - Real-time permission validation
+  - Clear permission descriptions
 
 ### UserInfo
 - **File**: `UserInfo.js`
-- **Purpose**: Display connected user information and permissions
+- **Purpose**: Display connected user information
 - **Props**:
-  - `authData` (object)
-  - `onDisconnect` (function)
+  - `authData`: Object containing user authentication data
+  - `onDisconnect`: Function to handle disconnection
+- **Features**:
+  - User details display
+  - Organization information
+  - Permission status
+  - Disconnect functionality
 
-### APITester
-- **File**: `APITester.js`
-- **Purpose**: API testing interface with tabs and forms
+### WalletConnection
+- **File**: `WalletConnection.js`
+- **Purpose**: Wallet connection interface
 - **Props**:
-  - `activeTab` (string)
-  - `setActiveTab` (function)
-  - `apiEndpoints` (object)
-  - `tabs` (array)
-  - `onMakeApiCall` (function)
-  - `loading` (boolean)
-  - `response` (string)
+  - `selectedPermissions`: Object containing selected permissions
+  - `onPermissionChange`: Function to handle permission changes
+  - `onConnect`: Function to handle wallet connection
+  - `clientConfig`: Object containing client configuration
+- **Features**:
+  - Permission selection
+  - OAuth flow initiation
+  - Configuration validation
+  - Error handling
 
-### ResponseViewer
-- **File**: `ResponseViewer.js`
-- **Purpose**: Display API responses with copy functionality
-- **Props**:
-  - `response` (string)
-  - `loading` (boolean)
+## Form Components
 
-## Usage
+Form components are located in the `forms/` subdirectory and handle specific API endpoint interactions:
+
+- **UserDetailsForm**: Get user information
+- **PreviewChargeForm**: Preview charges before execution
+- **ReportUsageForm**: Report usage and optionally charge users
+- **UsageReportsForm**: Get usage history with filters
+- **UsageReportByIdForm**: Get specific usage report by ID
+- **RevokeTokenForm**: Revoke OAuth access tokens
+- **IntrospectTokenForm**: Check token validity and status
+
+### Usage
 
 ```jsx
-import { Navigation, HeroSection, WalletConnection } from '@/components';
-
-// Use components in your JSX
-<Navigation isConnected={isConnected} />
-<HeroSection />
-<WalletConnection 
-  selectedPermissions={permissions}
-  onPermissionChange={handlePermissionChange}
-  onConnect={handleConnect}
-  clientConfig={config}
-/>
+import { HeroSection, Navigation, UserInfo } from '@/components';
+import { UserDetailsForm, ReportUsageForm } from '@/components/forms';
 ```
 
-## Design Principles
+## Styling
 
-1. **Single Responsibility**: Each component has one clear purpose
-2. **Reusability**: Components are designed to be reused across the application
-3. **Props Interface**: Clear, typed props for easy integration
-4. **Styling**: Consistent Tailwind CSS classes throughout
-5. **Accessibility**: Proper ARIA labels and keyboard navigation
+All components use Tailwind CSS for styling and are designed to be responsive and accessible.
+
+## State Management
+
+Components use React hooks for local state management and custom hooks for shared state and API interactions.
+
+## Constants and Utilities
+
+Components use centralized constants and utilities from `@/lib/constants` and `@/lib/utils` for:
+- Consistent UI text and labels
+- Form validation
+- API endpoint configuration
+- OAuth permission handling
+- Local storage management

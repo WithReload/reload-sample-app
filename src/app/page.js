@@ -17,17 +17,15 @@ import {
 } from "@/components/forms";
 import { useAPICalls, useOAuth } from "@/hooks";
 import { clientConfig } from "@/lib/config";
+import { DEFAULT_PERMISSIONS, TABS, UI_TEXT } from "@/lib/constants";
 import { useState } from "react";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("user");
 
   // OAuth permissions state
-  const [selectedPermissions, setSelectedPermissions] = useState({
-    identity: true,
-    usage_reporting: true,
-    payment: true,
-  });
+  const [selectedPermissions, setSelectedPermissions] =
+    useState(DEFAULT_PERMISSIONS);
 
   // Custom hooks
   const { isConnected, walletToken, authData, connectWallet, disconnect } =
@@ -45,15 +43,8 @@ export default function Home() {
     connectWallet(selectedPermissions);
   };
 
-  const tabs = [
-    { key: "user", title: "User Details" },
-    { key: "previewCharge", title: "Preview Charge" },
-    { key: "reportUsage", title: "Report Usage" },
-    { key: "usageReports", title: "Usage Reports" },
-    { key: "usageReportById", title: "Get Report by ID" },
-    { key: "revokeToken", title: "Revoke Token" },
-    { key: "introspectToken", title: "Introspect Token" },
-  ];
+  // Use tabs from constants
+  const tabs = TABS;
 
   return (
     <div className='min-h-screen bg-gray-50'>
@@ -94,10 +85,10 @@ export default function Home() {
                     </div>
                     <div>
                       <h2 className='text-lg font-semibold text-white'>
-                        Wallet Connected
+                        {UI_TEXT.WALLET_CONNECTED}
                       </h2>
                       <p className='text-gray-300 text-sm'>
-                        Ready to test Reload APIs
+                        {UI_TEXT.READY_TO_TEST}
                       </p>
                     </div>
                   </div>
@@ -105,7 +96,7 @@ export default function Home() {
                     onClick={disconnect}
                     className='px-3 py-2 bg-white/20 text-white text-sm font-medium rounded-md hover:bg-white/30 transition-colors'
                   >
-                    Disconnect
+                    {UI_TEXT.DISCONNECT}
                   </button>
                 </div>
               </div>
@@ -200,7 +191,7 @@ export default function Home() {
                       {/* Response */}
                       <div className='bg-gray-50 rounded-md p-4'>
                         <h3 className='text-lg font-semibold text-gray-900 mb-4'>
-                          API Response
+                          {UI_TEXT.API_RESPONSE}
                         </h3>
                         {loading ? (
                           <div className='flex items-center justify-center py-8'>
@@ -218,7 +209,7 @@ export default function Home() {
                                 }}
                                 className='text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded transition-colors text-gray-800 hover:text-gray-900'
                               >
-                                Copy
+                                {UI_TEXT.COPY}
                               </button>
                             </div>
                             <pre className='bg-white border border-gray-200 rounded-md p-3 text-xs text-gray-800 overflow-auto max-h-96'>
@@ -227,7 +218,7 @@ export default function Home() {
                           </div>
                         ) : (
                           <p className='text-gray-500 text-sm'>
-                            No response yet. Make an API call to see the result.
+                            {UI_TEXT.NO_RESPONSE}
                           </p>
                         )}
                       </div>

@@ -1,4 +1,6 @@
 import { clientConfig } from "@/lib/config";
+import { STORAGE_KEYS } from "@/lib/constants";
+import { oauth, storage } from "@/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 
 export function useOAuth() {
@@ -6,31 +8,13 @@ export function useOAuth() {
   const [walletToken, setWalletToken] = useState("");
   const [authData, setAuthData] = useState(null);
 
-  // Generate PKCE code challenge
-  const generateCodeChallenge = async (codeVerifier) => {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(codeVerifier);
-    const digest = await crypto.subtle.digest("SHA-256", data);
-    return btoa(String.fromCharCode(...new Uint8Array(digest)))
-      .replace(/\+/g, "-")
-      .replace(/\//g, "_")
-      .replace(/=/g, "");
-  };
-
-  // Generate random code verifier
-  const generateCodeVerifier = () => {
-    const array = new Uint8Array(32);
-    crypto.getRandomValues(array);
-    return btoa(String.fromCharCode(...array))
-      .replace(/\+/g, "-")
-      .replace(/\//g, "_")
-      .replace(/=/g, "");
-  };
+  // Use utility functions for PKCE
+  const generateCodeChallenge = oauth.generateCodeChallenge;
+  const generateCodeVerifier = oauth.generateCodeVerifier;
 
   const exchangeCodeForToken = useCallback(async (code) => {
     try {
-      const codeVerifier = sessionStorage.getItem("reload_code_verifier");
-      const state = sessionStorage.getItem("reload_state");
+      const { codeVerifier, state } = oauth.getOAuthData();
 
       if (!codeVerifier) {
         console.error("Code verifier not found in session storage");
@@ -69,7 +53,7 @@ export function useOAuth() {
         };
 
         // Store in localStorage for persistence across sessions
-        localStorage.setItem("reload_auth_data", JSON.stringify(authData));
+        storage.set(STORAGE_KEYS.AUTH_DATA, authData);
 
         // Update state
         setWalletToken(tokenData.access_token);
@@ -77,8 +61,7 @@ export function useOAuth() {
         setAuthData(authData);
 
         // Clear PKCE parameters
-        sessionStorage.removeItem("reload_code_verifier");
-        sessionStorage.removeItem("reload_state");
+        oauth.clearOAuthData();
 
         console.log("Successfully connected to Reload:", {
           user: tokenData.user.email,
@@ -133,8 +116,7 @@ export function useOAuth() {
       .join(" ");
 
     // Store PKCE parameters for token exchange
-    sessionStorage.setItem("reload_code_verifier", codeVerifier);
-    sessionStorage.setItem("reload_state", state);
+    oauth.saveOAuthData(state, codeVerifier);
 
     // Build OAuth URL
     const authUrl = new URL(oauthUrl);
@@ -155,7 +137,7 @@ export function useOAuth() {
     setIsConnected(false);
     setWalletToken("");
     setAuthData(null);
-    localStorage.removeItem("reload_auth_data");
+    storage.remove(STORAGE_KEYS.AUTH_DATA);
     console.log("Disconnected from Reload");
   };
 
@@ -163,9 +145,9 @@ export function useOAuth() {
   useEffect(() => {
     const checkExistingAuth = () => {
       try {
-        const storedAuthData = localStorage.getItem("reload_auth_data");
+        const storedAuthData = storage.get(STORAGE_KEYS.AUTH_DATA);
         if (storedAuthData) {
-          const authData = JSON.parse(storedAuthData);
+          const authData = storedAuthData;
 
           // Check if token is still valid (if it has an expiration)
           if (authData.expires_in && authData.expires_in !== null) {
@@ -176,7 +158,7 @@ export function useOAuth() {
 
             if (new Date() > expiresAt) {
               // Token expired, clear localStorage
-              localStorage.removeItem("reload_auth_data");
+              storage.remove(STORAGE_KEYS.AUTH_DATA);
               return;
             }
           }
@@ -194,7 +176,7 @@ export function useOAuth() {
         }
       } catch (error) {
         console.error("Error restoring auth data:", error);
-        localStorage.removeItem("reload_auth_data");
+        storage.remove(STORAGE_KEYS.AUTH_DATA);
       }
     };
 

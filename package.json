@@ -1,12 +1,37 @@
 {
   "name": "reload-test-app",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "A comprehensive test application for integrating with the Reload API platform",
   "private": true,
+  "keywords": [
+    "reload",
+    "api",
+    "oauth",
+    "ai",
+    "monetization",
+    "test-app",
+    "nextjs",
+    "react"
+  ],
+  "author": "Reload Team",
+  "license": "MIT",
+  "homepage": "https://github.com/your-org/reload-test-app#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/reload-test-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/reload-test-app/issues"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf .next out node_modules/.cache",
+    "preview": "next build && next start"
   },
   "dependencies": {
     "react": "^19.0.0",
