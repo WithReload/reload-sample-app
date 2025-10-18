@@ -13,6 +13,9 @@ export default function ReportUsageForm({
     usageType: DEFAULTS.USAGE_TYPE,
     description: DEFAULTS.DESCRIPTION,
     shortDescription: DEFAULTS.SHORT_DESCRIPTION,
+    costBeforeTax: "",
+    taxRate: "",
+    taxAmount: "",
     totalCost: "",
     llmModel: DEFAULTS.LLM_MODEL,
     llmProvider: DEFAULTS.LLM_PROVIDER,
@@ -35,6 +38,12 @@ export default function ReportUsageForm({
       shortDescription: formData.shortDescription || "",
       totalCost: parseFloat(formData.totalCost),
     };
+
+    // Add tax fields if provided
+    if (formData.costBeforeTax)
+      payload.costBeforeTax = parseFloat(formData.costBeforeTax);
+    if (formData.taxRate) payload.taxRate = parseFloat(formData.taxRate);
+    if (formData.taxAmount) payload.taxAmount = parseFloat(formData.taxAmount);
 
     // Add optional fields if provided
     if (formData.llmModel) payload.llmModel = formData.llmModel;
@@ -211,6 +220,83 @@ export default function ReportUsageForm({
           <p className='text-xs text-gray-500 mt-1'>
             Required field. Use 0 for free usage.
           </p>
+        </div>
+
+        {/* Tax Information Section */}
+        <div className='border-t border-gray-200 pt-4'>
+          <h4 className='text-sm font-medium text-gray-900 mb-3'>
+            Tax Information (Optional)
+          </h4>
+          <p className='text-xs text-gray-500 mb-4'>
+            Provide tax breakdown for detailed billing records
+          </p>
+
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+            <div>
+              <label className='block text-sm font-medium text-gray-700 mb-1'>
+                Cost Before Tax (USD)
+              </label>
+              <input
+                type='number'
+                className='w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-gray-900'
+                value={formData.costBeforeTax}
+                placeholder='5.00'
+                onChange={(e) =>
+                  handleInputChange("costBeforeTax", e.target.value)
+                }
+                min='0'
+                step='0.01'
+              />
+              <p className='text-xs text-gray-500 mt-1'>
+                Cost before any taxes
+              </p>
+            </div>
+
+            <div>
+              <label className='block text-sm font-medium text-gray-700 mb-1'>
+                Tax Rate (%)
+              </label>
+              <input
+                type='number'
+                className='w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-gray-900'
+                value={formData.taxRate}
+                placeholder='8'
+                onChange={(e) => handleInputChange("taxRate", e.target.value)}
+                min='0'
+                max='100'
+                step='0.01'
+              />
+              <p className='text-xs text-gray-500 mt-1'>
+                Tax rate as percentage (e.g., 8 for 8%)
+              </p>
+            </div>
+
+            <div>
+              <label className='block text-sm font-medium text-gray-700 mb-1'>
+                Tax Amount (USD)
+              </label>
+              <input
+                type='number'
+                className='w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-gray-900'
+                value={formData.taxAmount}
+                placeholder='0.40'
+                onChange={(e) => handleInputChange("taxAmount", e.target.value)}
+                min='0'
+                step='0.01'
+              />
+              <p className='text-xs text-gray-500 mt-1'>
+                Calculated tax amount
+              </p>
+            </div>
+          </div>
+
+          <div className='mt-3 p-3 bg-blue-50 border border-blue-200 rounded-md'>
+            <p className='text-xs text-blue-800'>
+              <strong>Note:</strong> If you provide tax fields, ensure totalCost
+              = costBeforeTax + taxAmount. If you don't provide tax fields,
+              totalCost will be used as the final amount.
+            </p>
+          </div>
         </div>
 
         <div>
