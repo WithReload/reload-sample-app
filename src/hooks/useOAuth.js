@@ -62,13 +62,6 @@ export function useOAuth() {
 
         // Clear PKCE parameters
         oauth.clearOAuthData();
-
-        console.log("Successfully connected to Reload:", {
-          user: tokenData.user.email,
-          organization: tokenData.organization.name,
-          permissions: tokenData.permissions,
-          environment: tokenData.environment,
-        });
       } else {
         console.error("Token exchange failed:", data.error || data.message);
         alert(
@@ -138,7 +131,6 @@ export function useOAuth() {
     setBillingAccountToken("");
     setAuthData(null);
     storage.remove(STORAGE_KEYS.AUTH_DATA);
-    console.log("Disconnected from Reload");
   };
 
   // Check for existing auth data in localStorage on component mount
@@ -167,12 +159,6 @@ export function useOAuth() {
           setBillingAccountToken(authData.access_token);
           setIsConnected(true);
           setAuthData(authData);
-
-          console.log("Restored existing Reload connection:", {
-            user: authData.user.email,
-            organization: authData.organization.name,
-            environment: authData.environment,
-          });
         }
       } catch (error) {
         console.error("Error restoring auth data:", error);
