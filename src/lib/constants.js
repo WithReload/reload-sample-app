@@ -66,7 +66,7 @@ export const UI_TEXT = {
   APP_TITLE: "Reload API Test App",
   APP_DESCRIPTION:
     "Test and integrate with Reload APIs for AI agent monetization",
-  WALLET_CONNECTED: "Wallet Connected",
+  BILLING_ACCOUNT_CONNECTED: "Billing Account Connected",
   READY_TO_TEST: "Ready to test Reload APIs",
   DISCONNECT: "Disconnect",
   API_RESPONSE: "API Response",

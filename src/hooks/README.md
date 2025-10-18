@@ -9,9 +9,9 @@ This directory contains custom React hooks used throughout the Reload API Test A
 - **Purpose**: Manages OAuth authentication flow and token state
 - **Returns**:
   - `isConnected`: Boolean indicating if user is authenticated
-  - `walletToken`: OAuth access token
+  - `billingAccountToken`: OAuth access token
   - `authData`: Complete authentication data object
-  - `connectWallet`: Function to initiate OAuth flow
+  - `connectBillingAccount`: Function to initiate OAuth flow
   - `disconnect`: Function to disconnect and clear auth data
   - `exchangeCodeForToken`: Function to exchange authorization code for token
 - **Features**:
@@ -24,7 +24,7 @@ This directory contains custom React hooks used throughout the Reload API Test A
 - **File**: `useAPICalls.js`
 - **Purpose**: Manages API calls and response handling
 - **Parameters**:
-  - `walletToken`: OAuth access token for authentication
+  - `billingAccountToken`: OAuth access token for authentication
 - **Returns**:
   - `loading`: Boolean indicating if API call is in progress
   - `response`: String containing formatted API response
@@ -43,10 +43,10 @@ This directory contains custom React hooks used throughout the Reload API Test A
 import { useOAuth } from '@/hooks';
 
 function MyComponent() {
-  const { isConnected, walletToken, authData, connectWallet, disconnect } = useOAuth();
+  const { isConnected, billingAccountToken, authData, connectBillingAccount, disconnect } = useOAuth();
   
   const handleConnect = () => {
-    connectWallet({
+    connectBillingAccount({
       identity: true,
       usage_reporting: true,
       payment: true
@@ -61,7 +61,7 @@ function MyComponent() {
           <button onClick={disconnect}>Disconnect</button>
         </div>
       ) : (
-        <button onClick={handleConnect}>Connect Wallet</button>
+        <button onClick={handleConnect}>Connect Billing Account</button>
       )}
     </div>
   );
@@ -73,8 +73,8 @@ function MyComponent() {
 import { useAPICalls } from '@/hooks';
 
 function MyComponent() {
-  const { walletToken } = useOAuth();
-  const { loading, response, makeApiCall } = useAPICalls(walletToken);
+  const { billingAccountToken } = useOAuth();
+  const { loading, response, makeApiCall } = useAPICalls(billingAccountToken);
   
   const handleGetUserDetails = () => {
     makeApiCall({

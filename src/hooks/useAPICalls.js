@@ -2,7 +2,7 @@ import { API_ENDPOINTS } from "@/lib/constants";
 import { api } from "@/lib/utils";
 import { useState } from "react";
 
-export function useAPICalls(walletToken) {
+export function useAPICalls(billingAccountToken) {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
 
@@ -38,7 +38,7 @@ export function useAPICalls(walletToken) {
         url = new URL(`/api/ai-agent${endpoint}`, window.location.origin);
         headers = {
           "Content-Type": "application/json",
-          "X-Access-Token": walletToken, // Only send OAuth token, client credentials handled server-side
+          "X-Access-Token": billingAccountToken, // Only send OAuth token, client credentials handled server-side
         };
       } else {
         // Show error for non-implemented endpoints

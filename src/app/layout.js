@@ -16,7 +16,7 @@ export const metadata = {
     "api",
     "testing",
     "oauth",
-    "wallet",
+    "billing account",
     "payments",
     "ai",
     "monetization",

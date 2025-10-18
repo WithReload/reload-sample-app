@@ -97,7 +97,7 @@ NEXT_PUBLIC_RELOAD_OAUTH_URL=https://oauth.withreload.com
 ### 1. OAuth Authentication
 
 1. **Select Permissions**: Choose which permissions to request (Identity, Usage Reporting, Payment)
-2. **Connect Wallet**: Click "Connect Reload Account" to start OAuth flow
+2. **Connect Billing Account**: Click "Connect Reload Billing Account" to start OAuth flow
 3. **Authorize**: Complete authorization in the Reload portal
 4. **Connected**: You'll be redirected back with an access token
 
@@ -203,7 +203,7 @@ The app uses a proxy pattern where:
 - [ ] User details endpoint returns correct data
 - [ ] Preview charge validates user balance
 - [ ] Usage reporting creates records correctly
-- [ ] Charging deducts from user wallet
+- [ ] Charging deducts from user billing account
 - [ ] Usage reports filter correctly
 - [ ] Token management works (revoke/introspect)
 - [ ] Error handling displays user-friendly messages

@@ -48,13 +48,13 @@ This directory contains all the React components used in the Reload API Test App
   - Permission status
   - Disconnect functionality
 
-### WalletConnection
-- **File**: `WalletConnection.js`
-- **Purpose**: Wallet connection interface
+### BillingAccountConnection
+- **File**: `BillingAccountConnection.js`
+- **Purpose**: Billing account connection interface
 - **Props**:
   - `selectedPermissions`: Object containing selected permissions
   - `onPermissionChange`: Function to handle permission changes
-  - `onConnect`: Function to handle wallet connection
+  - `onConnect`: Function to handle billing account connection
   - `clientConfig`: Object containing client configuration
 - **Features**:
   - Permission selection

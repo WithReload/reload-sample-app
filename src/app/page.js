@@ -1,10 +1,10 @@
 "use client";
 
 import {
+  BillingAccountConnection,
   HeroSection,
   Navigation,
   UserInfo,
-  WalletConnection,
 } from "@/components";
 import {
   IntrospectTokenForm,
@@ -28,9 +28,14 @@ export default function Home() {
     useState(DEFAULT_PERMISSIONS);
 
   // Custom hooks
-  const { isConnected, walletToken, authData, connectWallet, disconnect } =
-    useOAuth();
-  const { loading, response, makeApiCall } = useAPICalls(walletToken);
+  const {
+    isConnected,
+    billingAccountToken,
+    authData,
+    connectBillingAccount,
+    disconnect,
+  } = useOAuth();
+  const { loading, response, makeApiCall } = useAPICalls(billingAccountToken);
 
   const handlePermissionChange = (permission) => {
     setSelectedPermissions((prev) => ({
@@ -40,7 +45,7 @@ export default function Home() {
   };
 
   const handleConnect = () => {
-    connectWallet(selectedPermissions);
+    connectBillingAccount(selectedPermissions);
   };
 
   // Use tabs from constants
@@ -53,9 +58,9 @@ export default function Home() {
       <div className='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
         <HeroSection />
 
-        {/* Wallet Connection Section */}
+        {/* Billing Account Connection Section */}
         {!isConnected ? (
-          <WalletConnection
+          <BillingAccountConnection
             selectedPermissions={selectedPermissions}
             onPermissionChange={handlePermissionChange}
             onConnect={handleConnect}
@@ -85,7 +90,7 @@ export default function Home() {
                     </div>
                     <div>
                       <h2 className='text-lg font-semibold text-white'>
-                        {UI_TEXT.WALLET_CONNECTED}
+                        {UI_TEXT.BILLING_ACCOUNT_CONNECTED}
                       </h2>
                     </div>
                   </div>

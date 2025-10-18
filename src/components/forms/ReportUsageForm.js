@@ -112,7 +112,7 @@ export default function ReportUsageForm({
                     Create Charge
                   </label>
                   <p className='text-xs text-gray-500 mt-1'>
-                    Deduct the specified amount from user&apos;s wallet
+                    Deduct the specified amount from user&apos;s billing account
                   </p>
                 </div>
               </div>

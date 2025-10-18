@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 
 export function useOAuth() {
   const [isConnected, setIsConnected] = useState(false);
-  const [walletToken, setWalletToken] = useState("");
+  const [billingAccountToken, setBillingAccountToken] = useState("");
   const [authData, setAuthData] = useState(null);
 
   // Use utility functions for PKCE
@@ -48,7 +48,7 @@ export function useOAuth() {
           organization: tokenData.organization,
           user: tokenData.user,
           permissions: tokenData.permissions,
-          walletId: tokenData.walletId,
+          billingAccountId: tokenData.billingAccountId,
           connectedAt: new Date().toISOString(),
         };
 
@@ -56,7 +56,7 @@ export function useOAuth() {
         storage.set(STORAGE_KEYS.AUTH_DATA, authData);
 
         // Update state
-        setWalletToken(tokenData.access_token);
+        setBillingAccountToken(tokenData.access_token);
         setIsConnected(true);
         setAuthData(authData);
 
@@ -83,7 +83,7 @@ export function useOAuth() {
     }
   }, []);
 
-  const connectWallet = async (selectedPermissions) => {
+  const connectBillingAccount = async (selectedPermissions) => {
     const clientId = clientConfig.reloadClientId;
     const redirectUri = clientConfig.reloadRedirectUri;
     const oauthUrl = clientConfig.reloadOauthUrl || "http://localhost:3001";
@@ -135,7 +135,7 @@ export function useOAuth() {
   const disconnect = () => {
     // Clear all auth data
     setIsConnected(false);
-    setWalletToken("");
+    setBillingAccountToken("");
     setAuthData(null);
     storage.remove(STORAGE_KEYS.AUTH_DATA);
     console.log("Disconnected from Reload");
@@ -164,7 +164,7 @@ export function useOAuth() {
           }
 
           // Restore auth state
-          setWalletToken(authData.access_token);
+          setBillingAccountToken(authData.access_token);
           setIsConnected(true);
           setAuthData(authData);
 
@@ -194,9 +194,9 @@ export function useOAuth() {
 
   return {
     isConnected,
-    walletToken,
+    billingAccountToken,
     authData,
-    connectWallet,
+    connectBillingAccount,
     disconnect,
     exchangeCodeForToken,
   };

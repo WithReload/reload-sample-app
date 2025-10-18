@@ -1,7 +1,7 @@
-import { Wallet } from "lucide-react";
+import { CreditCard } from "lucide-react";
 import PermissionSelector from "./PermissionSelector";
 
-export default function WalletConnection({
+export default function BillingAccountConnection({
   selectedPermissions,
   onPermissionChange,
   onConnect,
@@ -21,10 +21,10 @@ export default function WalletConnection({
         <div className='bg-gray-800 px-6 py-4 rounded-t-lg'>
           <div className='text-center'>
             <h2 className='text-lg font-semibold text-white mb-1'>
-              Connect Your Reload Account
+              Connect Your Reload Billing Account
             </h2>
             <p className='text-gray-300 text-sm'>
-              Authorize access to your Reload account
+              Authorize access to your Reload billing account
             </p>
           </div>
         </div>
@@ -45,8 +45,8 @@ export default function WalletConnection({
                 disabled={!isConfigValid || !hasValidPermissions}
                 className='inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white bg-gray-800 rounded-md hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
               >
-                <Wallet className='w-4 h-4 mr-2' />
-                Connect Reload Account
+                <CreditCard className='w-4 h-4 mr-2' />
+                Connect Reload Billing Account
               </button>
               {!hasValidPermissions && (
                 <p className='text-red-500 text-xs mt-2'>

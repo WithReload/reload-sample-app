@@ -7,7 +7,7 @@ export default function PermissionSelector({
   const permissionDescriptions = {
     identity: "View your basic profile information",
     usage_reporting: "Report usage data and analytics",
-    payment: "Deduct credits from your wallet",
+    payment: "Deduct credits from your billing account",
   };
 
   return (
