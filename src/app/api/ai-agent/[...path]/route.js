@@ -1,19 +1,23 @@
 import { NextResponse } from "next/server";
 
 export async function GET(request, { params }) {
-  return handleAIAgentRequest(request, params, "GET");
+  const resolvedParams = await params;
+  return handleAIAgentRequest(request, resolvedParams, "GET");
 }
 
 export async function POST(request, { params }) {
-  return handleAIAgentRequest(request, params, "POST");
+  const resolvedParams = await params;
+  return handleAIAgentRequest(request, resolvedParams, "POST");
 }
 
 export async function PUT(request, { params }) {
-  return handleAIAgentRequest(request, params, "PUT");
+  const resolvedParams = await params;
+  return handleAIAgentRequest(request, resolvedParams, "PUT");
 }
 
 export async function DELETE(request, { params }) {
-  return handleAIAgentRequest(request, params, "DELETE");
+  const resolvedParams = await params;
+  return handleAIAgentRequest(request, resolvedParams, "DELETE");
 }
 
 async function handleAIAgentRequest(request, params, method) {
